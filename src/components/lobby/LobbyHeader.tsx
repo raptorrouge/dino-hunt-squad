@@ -1,7 +1,16 @@
-import { ArrowLeft, Users, Wifi } from "lucide-react";
+import { ArrowLeft, Users, Wifi, Trophy, Target } from "lucide-react";
 import { Link } from "react-router-dom";
+import type { SquadStats } from "@/types/game";
 
-const LobbyHeader = () => {
+interface LobbyHeaderProps {
+  stats: SquadStats;
+}
+
+const LobbyHeader = ({ stats }: LobbyHeaderProps) => {
+  const successRate = stats.missionsPlayed > 0 
+    ? Math.round((stats.successes / stats.missionsPlayed) * 100) 
+    : 0;
+
   return (
     <header className="bg-card border-b border-border">
       <div className="container mx-auto px-4">
@@ -24,6 +33,22 @@ const LobbyHeader = () => {
           </div>
           
           <div className="flex items-center gap-6">
+            {stats.missionsPlayed > 0 && (
+              <>
+                <div className="flex items-center gap-2 text-sm">
+                  <Target className="w-4 h-4 text-primary" />
+                  <span className="text-muted-foreground">Missions:</span>
+                  <span className="text-foreground font-medium">{stats.missionsPlayed}</span>
+                </div>
+                
+                <div className="flex items-center gap-2 text-sm">
+                  <Trophy className="w-4 h-4 text-accent" />
+                  <span className="text-muted-foreground">Réussite:</span>
+                  <span className="text-accent font-medium">{successRate}%</span>
+                </div>
+              </>
+            )}
+            
             <div className="flex items-center gap-2 text-sm">
               <Users className="w-4 h-4 text-accent" />
               <span className="text-muted-foreground">Squad:</span>
