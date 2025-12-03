@@ -1,38 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useGame } from "@/contexts/GameContext";
 import MissionSelector from "@/components/lobby/MissionSelector";
 import SquadPanel from "@/components/lobby/SquadPanel";
 import DinoCompanionSelector from "@/components/lobby/DinoCompanionSelector";
 import LobbyHeader from "@/components/lobby/LobbyHeader";
 import ReadyPanel from "@/components/lobby/ReadyPanel";
-
-export interface Mission {
-  id: string;
-  name: string;
-  zone: string;
-  difficulty: "easy" | "medium" | "hard" | "extreme";
-  targets: string[];
-  extractionTime: string;
-  rewards: string;
-}
-
-export interface SquadMember {
-  id: string;
-  name: string;
-  role: "tracker" | "trapper" | "tank" | "support" | "logistics";
-  ready: boolean;
-  isLocal?: boolean;
-}
-
-export interface DinoCompanion {
-  id: string;
-  name: string;
-  species: string;
-  role: "scout" | "tank" | "transport" | "combat";
-  level: number;
-  assigned: boolean;
-}
+import type { Mission, SquadMember, DinoCompanion } from "@/types/game";
 
 const Lobby = () => {
+  const navigate = useNavigate();
+  const { startExpedition, gameState } = useGame();
+  
   const [selectedMission, setSelectedMission] = useState<Mission | null>(null);
   const [squadMembers, setSquadMembers] = useState<SquadMember[]>([
     { id: "1", name: "Vous", role: "tracker", ready: false, isLocal: true },
@@ -95,15 +74,22 @@ const Lobby = () => {
     );
   };
 
-  const allReady = squadMembers.every((m) => m.ready) && !!selectedMission;
+  const handleLaunchExpedition = () => {
+    if (!selectedMission) return;
+    const companion = companions.find(c => c.id === selectedCompanion) || null;
+    startExpedition(selectedMission, squadMembers, companion);
+    navigate("/expedition");
+  };
+
+  const localPlayer = squadMembers.find((m) => m.isLocal);
+  const allReady = squadMembers.every((m) => m.ready) && !!selectedMission && !!selectedCompanion;
 
   return (
     <div className="min-h-screen bg-background">
-      <LobbyHeader />
+      <LobbyHeader stats={gameState.squadStats} />
       
       <div className="container mx-auto px-4 py-6">
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Left Column - Missions */}
           <div className="lg:col-span-2 space-y-6">
             <MissionSelector
               missions={missions}
@@ -118,7 +104,6 @@ const Lobby = () => {
             />
           </div>
           
-          {/* Right Column - Squad */}
           <div className="space-y-6">
             <SquadPanel
               members={squadMembers}
@@ -126,10 +111,12 @@ const Lobby = () => {
             />
             
             <ReadyPanel
-              isReady={squadMembers.find((m) => m.isLocal)?.ready || false}
+              isReady={localPlayer?.ready || false}
               allReady={allReady}
               selectedMission={selectedMission}
+              selectedCompanion={!!selectedCompanion}
               onToggleReady={handleToggleReady}
+              onLaunch={handleLaunchExpedition}
             />
           </div>
         </div>
