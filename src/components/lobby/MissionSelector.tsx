@@ -1,5 +1,5 @@
 import { MapPin, Clock, Target, Star } from "lucide-react";
-import type { Mission } from "@/pages/Lobby";
+import type { Mission } from "@/types/game";
 
 interface MissionSelectorProps {
   missions: Mission[];

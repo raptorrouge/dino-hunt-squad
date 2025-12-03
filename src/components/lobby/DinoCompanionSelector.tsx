@@ -1,5 +1,5 @@
 import { Footprints, Shield, Truck, Swords, Star } from "lucide-react";
-import type { DinoCompanion } from "@/pages/Lobby";
+import type { DinoCompanion } from "@/types/game";
 
 interface DinoCompanionSelectorProps {
   companions: DinoCompanion[];

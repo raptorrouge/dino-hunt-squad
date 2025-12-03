@@ -1,5 +1,5 @@
 import { Users, Shield, Eye, Package, Heart, Wrench, Check, X } from "lucide-react";
-import type { SquadMember } from "@/pages/Lobby";
+import type { SquadMember } from "@/types/game";
 
 interface SquadPanelProps {
   members: SquadMember[];
