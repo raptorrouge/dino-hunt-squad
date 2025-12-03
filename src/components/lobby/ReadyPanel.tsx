@@ -1,15 +1,24 @@
 import { Rocket, AlertTriangle, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Mission } from "@/pages/Lobby";
+import type { Mission } from "@/types/game";
 
 interface ReadyPanelProps {
   isReady: boolean;
   allReady: boolean;
   selectedMission: Mission | null;
+  selectedCompanion: boolean;
   onToggleReady: () => void;
+  onLaunch: () => void;
 }
 
-const ReadyPanel = ({ isReady, allReady, selectedMission, onToggleReady }: ReadyPanelProps) => {
+const ReadyPanel = ({ 
+  isReady, 
+  allReady, 
+  selectedMission, 
+  selectedCompanion,
+  onToggleReady,
+  onLaunch 
+}: ReadyPanelProps) => {
   return (
     <div className="bg-card border border-border rounded-lg overflow-hidden">
       <div className="p-4 border-b border-border">
@@ -25,6 +34,10 @@ const ReadyPanel = ({ isReady, allReady, selectedMission, onToggleReady }: Ready
           <StatusCheck 
             label="Mission sélectionnée" 
             checked={!!selectedMission} 
+          />
+          <StatusCheck 
+            label="Compagnon sélectionné" 
+            checked={selectedCompanion} 
           />
           <StatusCheck 
             label="Vous êtes prêt" 
@@ -61,6 +74,7 @@ const ReadyPanel = ({ isReady, allReady, selectedMission, onToggleReady }: Ready
           size="xl"
           className="w-full"
           disabled={!allReady}
+          onClick={onLaunch}
         >
           <Rocket className="w-5 h-5 mr-2" />
           LANCER L'EXPÉDITION
@@ -70,7 +84,7 @@ const ReadyPanel = ({ isReady, allReady, selectedMission, onToggleReady }: Ready
           <div className="flex items-start gap-2 p-3 bg-warning/10 border border-warning/30 rounded-lg">
             <AlertTriangle className="w-4 h-4 text-warning flex-shrink-0 mt-0.5" />
             <p className="text-xs text-muted-foreground">
-              Tous les membres doivent être prêts et une mission doit être sélectionnée pour lancer.
+              Tous les membres doivent être prêts, une mission et un compagnon sélectionnés pour lancer.
             </p>
           </div>
         )}
