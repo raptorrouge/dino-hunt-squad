@@ -16,7 +16,7 @@ const Lobby = () => {
   const [squadMembers, setSquadMembers] = useState<SquadMember[]>([
     { id: "1", name: "Vous", role: "tracker", ready: false, isLocal: true },
     { id: "2", name: "ShadowHunter", role: "trapper", ready: true },
-    { id: "3", name: "DinoSlayer99", role: "tank", ready: false },
+    { id: "3", name: "DinoSlayer99", role: "tank", ready: true },
   ]);
   const [companions, setCompanions] = useState<DinoCompanion[]>([
     { id: "1", name: "Rex", species: "Velociraptor", role: "scout", level: 7, assigned: false },
